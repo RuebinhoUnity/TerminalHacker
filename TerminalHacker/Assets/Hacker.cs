@@ -1,20 +1,26 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Hacker : MonoBehaviour {
 
     private string greeting = "Hello Hackerman!";
+    //Game state
+    int levelNumber;
+    enum Screen { MainMenu, Password, Win };
+    Screen currentScreen;
 
 	// Use this for initialization
 	void Start ()
     {
         print("Hello Console!");
-        ShowMainMenu(greeting);
+        ShowMainMenu();
     }
 
-    private void ShowMainMenu(string greeting)
+    private void ShowMainMenu()
     {
+        currentScreen = Screen.MainMenu;
         Terminal.ClearScreen();
         Terminal.WriteLine(greeting);
         Terminal.WriteLine("What do you want to hack ?");
@@ -25,8 +31,52 @@ public class Hacker : MonoBehaviour {
         Terminal.WriteLine("Enter your selection:");
     }
 
-    // Update is called once per frame
-    void Update () {
-		
-	}
+    void OnUserInput(string input)
+    {
+        //TODO handle differently depending on screen
+        if (input == "menu")
+        {
+            ShowMainMenu();
+        }
+        else if (currentScreen == Screen.MainMenu)
+        {
+            RunMainMenu(input);
+        }
+    }
+
+    void RunMainMenu(string input)
+    {
+        if (input == "1")
+        {
+            levelNumber = 1;
+            StartGame();
+        }
+        else if (input == "2")
+        {
+            levelNumber = 2;
+            StartGame();
+        }
+        else if (input == "3")
+        {
+            Terminal.WriteLine("You chose lvl 3");
+        }
+        else if (input == "menu")
+        {
+            ShowMainMenu();
+        }
+        else if (input == "007")
+        {
+            Terminal.WriteLine("Welcome back Mr Bond! Choose your death");
+        }
+        else
+        {
+            Terminal.WriteLine("Please select a valid level!");
+        }
+    }
+
+    void StartGame()
+    {
+        currentScreen = Screen.Password;
+        Terminal.WriteLine("You chose lvl " + levelNumber);
+    }
 }
