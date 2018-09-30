@@ -12,9 +12,11 @@ public class Hacker : MonoBehaviour {
     Screen currentScreen;
 
     //level1 passwords
+    string lvl1name = "Hotel Concorde";
     string lvl1password = "Hotel";
 
     //level2 passwords
+    string lvl2name = "Finanzamt";
     string lvl2password = "Steuererklärung";
 
     // Use this for initialization
@@ -133,7 +135,23 @@ public class Hacker : MonoBehaviour {
     {
         currentScreen = Screen.Password;
         Terminal.WriteLine(" ");
-        Terminal.WriteLine("You chose lvl " + levelNumber);
+        Terminal.WriteLine("You chose lvl " + levelNumber + ": " + ReturnLevelnameByNumber(levelNumber));
         Terminal.WriteLine("Please input the correct password:");
+    }
+
+    string ReturnLevelnameByNumber(int levelNumber)
+    {
+        if (levelNumber == 1)
+        {
+            return lvl1name;
+        }
+        else if (levelNumber == 2)
+        {
+            return lvl2name;
+        }
+        else
+        {
+            return "";
+        }
     }
 }
