@@ -3,24 +3,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Hacker : MonoBehaviour {
+public class Hacker : MonoBehaviour
+{
 
-    private string greeting = "Hello Hackerman!";
+    //Game configuration
+
+    //level1 data
+    string lvl1name = "Hotel Concorde";
+    string[] lvl1passwords = { "Hotel", "Concorde", "Mini Bar", "Wellness", "Frühstücksbuffet" };
+
+    //level2 data
+    string lvl2name = "Finanzamt";
+    string[] lvl2passwords = { "Steuererklärung", "Paragraph", "Nordkirchen", "Diplomfinanzwirtin", "Verspätungszuschlag" };
+
+    //level2 data
+    string lvl3name = "AOK Systems";
+    string[] lvl3passwords = { "Defragmentierungsprozess", "hochkomplex", "hochintegrativ", "Change Request", "Qualitätssicherung" };
+
     //Game state
     int levelNumber;
     enum Screen { MainMenu, Password, Win };
     Screen currentScreen;
+    string password = "";
 
-    //level1 passwords
-    string lvl1name = "Hotel Concorde";
-    string lvl1password = "Hotel";
-
-    //level2 passwords
-    string lvl2name = "Finanzamt";
-    string lvl2password = "Steuererklärung";
+    string greeting = "Hello Hackerman!";
 
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         print("Hello Console!");
         ShowMainMenu();
@@ -62,30 +71,14 @@ public class Hacker : MonoBehaviour {
 
     void CheckPassword(string input)
     {
-        if (levelNumber == 1)
+        if (input == password)
         {
-            if (input == lvl1password)
-            {
-                WinGame();
-            }
-            else
-            {
-                TryAgain();
-            }
+            WinGame();
         }
-        
-        if (levelNumber == 2)
+        else
         {
-            if (input == lvl2password)
-            {
-                WinGame();
-            }
-            else
-            {
-                TryAgain();
-            }
+            TryAgain();
         }
-        
     }
 
     void TryAgain()
@@ -103,19 +96,12 @@ public class Hacker : MonoBehaviour {
 
     void RunMainMenu(string input)
     {
-        if (input == "1")
+        bool isValidLevelNumber = (input == "1" || input == "2" || input == "3");
+
+        if (isValidLevelNumber)
         {
-            levelNumber = 1;
+            levelNumber = int.Parse(input);
             StartGame();
-        }
-        else if (input == "2")
-        {
-            levelNumber = 2;
-            StartGame();
-        }
-        else if (input == "3")
-        {
-            Terminal.WriteLine("You chose lvl 3");
         }
         else if (input == "menu")
         {
@@ -134,9 +120,44 @@ public class Hacker : MonoBehaviour {
     void StartGame()
     {
         currentScreen = Screen.Password;
-        Terminal.WriteLine(" ");
+        Terminal.ClearScreen();
+        
+        password = GetRandomPasswordFromArray(levelNumber);
+     
         Terminal.WriteLine("You chose lvl " + levelNumber + ": " + ReturnLevelnameByNumber(levelNumber));
         Terminal.WriteLine("Please input the correct password:");
+    }
+
+    string GetRandomPasswordFromArray(int levelNumber)
+    {
+        string[] pwArray = null;
+        pwArray = GetPWArrayDependingOnLevelNumber(levelNumber);
+        int pwArrayLength = pwArray.Length;
+
+        int RandomIntInArray = UnityEngine.Random.Range(0, pwArrayLength);
+        print(RandomIntInArray);
+
+        return pwArray[RandomIntInArray];
+
+    }
+
+    string[] GetPWArrayDependingOnLevelNumber(int levelNumber)
+    {
+        switch(levelNumber)
+        {
+            case 1:
+                return lvl1passwords;
+
+            case 2:
+                return lvl2passwords;
+
+            case 3:
+                return lvl3passwords;
+
+            default:
+                Debug.Log("Invalid Levelnumber");
+                return null;
+        }
     }
 
     string ReturnLevelnameByNumber(int levelNumber)
