@@ -26,7 +26,8 @@ public class Hacker : MonoBehaviour
     Screen currentScreen;
     string password = "";
 
-    string greeting = "Hello Hackerman!";
+    const string greeting = "Hello Hackerman!";
+    const string menuHint = "Return to the menu with 'menu'";
 
     // Use this for initialization
     void Start()
@@ -84,14 +85,60 @@ public class Hacker : MonoBehaviour
     void TryAgain()
     {
         Terminal.WriteLine("Wrong!");
-        Terminal.WriteLine("Please input the correct password:");
+        Terminal.WriteLine("Input the password, ");
+        Terminal.WriteLine("hint: " + password.Anagram());
+        Terminal.WriteLine(menuHint);
     }
 
     void WinGame()
     {
         currentScreen = Screen.Win;
-        Terminal.WriteLine("You're so good man! You win!");
-        Terminal.WriteLine("For the menu type 'menu'");
+        Terminal.ClearScreen();
+        ShowLevelReward();
+        Terminal.WriteLine(menuHint);
+    }
+
+    void ShowLevelReward()
+    {
+        switch (levelNumber)
+        {
+            case 1:
+                Terminal.WriteLine("Have a drink at the hotel lobby!");
+                Terminal.WriteLine(@"
+   ______//
+   \    ///     Hotel
+    \  ///
+     \///       Concorde
+      vv
+    __||__
+");
+                break;
+            case 2:
+                Terminal.WriteLine(@"
+                 _____
+              .-'     `-. 
+            .'  .- -.- '
+           /  .'                 
+      .-- - ' '--------.      Finanz
+       '':  :'''''''''''
+    .---- - '  '---- -.     verwaltung
+     '''''\  \'''''''''
+           \  `.                NRW
+            '.  `-----.
+              '-.____.'");
+                break;
+            case 3:
+                Terminal.WriteLine(@"
+       *  *  *  *    * * *
+       *        *  *        *
+       ****     **** *    *
+       ****     **** *    *
+       *        *  *        *
+       *  *  *  *    * * *  
+   Willkommen bei der AOK Systems!
+");
+                break;
+        }
     }
 
     void RunMainMenu(string input)
@@ -101,7 +148,7 @@ public class Hacker : MonoBehaviour
         if (isValidLevelNumber)
         {
             levelNumber = int.Parse(input);
-            StartGame();
+            AskForPassword();
         }
         else if (input == "menu")
         {
@@ -114,10 +161,11 @@ public class Hacker : MonoBehaviour
         else
         {
             Terminal.WriteLine("Please select a valid level!");
+            Terminal.WriteLine(menuHint);
         }
     }
 
-    void StartGame()
+    void AskForPassword()
     {
         currentScreen = Screen.Password;
         Terminal.ClearScreen();
@@ -125,7 +173,9 @@ public class Hacker : MonoBehaviour
         password = GetRandomPasswordFromArray(levelNumber);
      
         Terminal.WriteLine("You chose lvl " + levelNumber + ": " + ReturnLevelnameByNumber(levelNumber));
-        Terminal.WriteLine("Please input the correct password:");
+        Terminal.WriteLine("Input the password, ");
+        Terminal.WriteLine("hint: " + password.Anagram());
+        Terminal.WriteLine(menuHint);
     }
 
     string GetRandomPasswordFromArray(int levelNumber)
@@ -169,6 +219,10 @@ public class Hacker : MonoBehaviour
         else if (levelNumber == 2)
         {
             return lvl2name;
+        }
+        else if (levelNumber == 3)
+        {
+            return lvl3name;
         }
         else
         {
