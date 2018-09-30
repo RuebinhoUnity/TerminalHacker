@@ -11,8 +11,16 @@ public class Hacker : MonoBehaviour {
     enum Screen { MainMenu, Password, Win };
     Screen currentScreen;
 
-	// Use this for initialization
-	void Start ()
+    //level1 passwords
+    string lvl1name = "Hotel Concorde";
+    string lvl1password = "Hotel";
+
+    //level2 passwords
+    string lvl2name = "Finanzamt";
+    string lvl2password = "Steuererklärung";
+
+    // Use this for initialization
+    void Start ()
     {
         print("Hello Console!");
         ShowMainMenu();
@@ -42,6 +50,55 @@ public class Hacker : MonoBehaviour {
         {
             RunMainMenu(input);
         }
+        else if (currentScreen == Screen.Password)
+        {
+            CheckPassword(input);
+        }
+        else if (currentScreen == Screen.Win)
+        {
+
+        }
+    }
+
+    void CheckPassword(string input)
+    {
+        if (levelNumber == 1)
+        {
+            if (input == lvl1password)
+            {
+                WinGame();
+            }
+            else
+            {
+                TryAgain();
+            }
+        }
+        
+        if (levelNumber == 2)
+        {
+            if (input == lvl2password)
+            {
+                WinGame();
+            }
+            else
+            {
+                TryAgain();
+            }
+        }
+        
+    }
+
+    void TryAgain()
+    {
+        Terminal.WriteLine("Wrong!");
+        Terminal.WriteLine("Please input the correct password:");
+    }
+
+    void WinGame()
+    {
+        currentScreen = Screen.Win;
+        Terminal.WriteLine("You're so good man! You win!");
+        Terminal.WriteLine("For the menu type 'menu'");
     }
 
     void RunMainMenu(string input)
@@ -77,6 +134,24 @@ public class Hacker : MonoBehaviour {
     void StartGame()
     {
         currentScreen = Screen.Password;
-        Terminal.WriteLine("You chose lvl " + levelNumber);
+        Terminal.WriteLine(" ");
+        Terminal.WriteLine("You chose lvl " + levelNumber + ": " + ReturnLevelnameByNumber(levelNumber));
+        Terminal.WriteLine("Please input the correct password:");
+    }
+
+    string ReturnLevelnameByNumber(int levelNumber)
+    {
+        if (levelNumber == 1)
+        {
+            return lvl1name;
+        }
+        else if (levelNumber == 2)
+        {
+            return lvl2name;
+        }
+        else
+        {
+            return "";
+        }
     }
 }
